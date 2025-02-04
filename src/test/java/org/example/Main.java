@@ -11,6 +11,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 public class Main {
     public static void loginTest(String url)
@@ -74,12 +76,66 @@ public class Main {
         {
             System.out.println("The text was saved successfully");
         }
-        
+    }
+
+    public static void expPageCase3(String url)
+    {
+        WebDriver driver = new ChromeDriver();
+        driver.get(url);
+        WebElement editBtn = driver.findElement(By.id("edit_btn"));
+        WebElement input = driver.findElement(By.className("input-field"));
+        editBtn.click();
+        input.clear();
+        input.sendKeys("Text");
+        WebElement saveBtn = driver.findElement(By.id("save_btn"));
+        saveBtn.click();
+        System.out.println(input.getDomProperty("value"));
+        String value = input.getDomProperty("value");
+        if(Objects.equals(value, "Text")){
+            System.out.println("Input text changed.");
+        }
+        driver.quit();
+    }
+
+    public boolean isElementPresent(By locatorKey,WebDriver driver) {
+        try {
+            driver.findElement(locatorKey);
+            return true;
+        } catch (org.openqa.selenium.NoSuchElementException e) {
+            return false;
+        }
+    }
+
+    public static void expPageCase4(String url)
+    {
+        WebDriver driver = new ChromeDriver();
+        driver.get(url);
+
+        WebElement instructionText = driver.findElement(By.id("instructions"));
+        WebElement addBtn = driver.findElement(By.id("add_btn"));
+        addBtn.click();
+        if(!instructionText.isDisplayed())
+        {
+            System.out.println("instruction text isn't displayed anymore");
+        }
+    }
+
+    public static void expPageCase5(String url)
+    {
+        WebDriver driver = new ChromeDriver();
+        driver.get(url);
+
+        WebElement addBtn = driver.findElement(By.id("add_btn"));
+        addBtn.click();
+
+        driver.manage().timeouts().implicitlyWait(6, TimeUnit.SECONDS);
+        WebElement secondInput = driver.findElement(By.xpath("//div[@id='row2']/input[@class='input-field']"));
+        System.out.println(secondInput.isDisplayed());
     }
 
     public static void main(String[] args) {
         //loginTest("https://practicetestautomation.com/practice-test-login/");
-        expPageCase2("https://practicetestautomation.com/practice-test-exceptions/");
+        expPageCase5("https://practicetestautomation.com/practice-test-exceptions/");
 
     }
 }
